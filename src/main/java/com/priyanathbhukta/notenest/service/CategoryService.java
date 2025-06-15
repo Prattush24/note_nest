@@ -2,12 +2,17 @@ package com.priyanathbhukta.notenest.service;
 
 import java.util.List;
 
+import com.priyanathbhukta.notenest.dto.CategoryDto;
+import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
 
 public interface CategoryService {
 	
-	public Boolean saveCategory(Category category);
+	public Boolean saveCategory(CategoryDto categoryDto);
 	
-	public List<Category> getAllCategory();
+	public List<CategoryDto> getAllCategory();
+
+	public List<CategoryResponse> getActiveCategory();
 
 }
+		
