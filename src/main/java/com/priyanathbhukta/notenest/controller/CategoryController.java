@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,10 @@ import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
 import com.priyanathbhukta.notenest.service.CategoryService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -41,7 +45,7 @@ public class CategoryController {
 	
 	
 //	Category api for get all categories
-	@GetMapping("/category")
+	@GetMapping("/")
 	public ResponseEntity<?> getAllCategory(){
 		
 		List<CategoryDto> allCategory = categoryService.getAllCategory();
@@ -54,7 +58,7 @@ public class CategoryController {
 		
 	}
 	
-	@GetMapping("/active-category")
+	@GetMapping("/active")
 	public ResponseEntity<?> getActiveCategory(){
 		
 		List<CategoryResponse> activeCategory = categoryService.getActiveCategory();
@@ -66,6 +70,27 @@ public class CategoryController {
 		}
 		
 	}
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) {
+		
+		CategoryDto categoryDto = categoryService.getCategoryById(id);
+		if(ObjectUtils.isEmpty(categoryDto)) {
+			return new ResponseEntity<>("Category not found with Id = "+id, HttpStatus.NOT_FOUND);
+		}
+		else {
+			return new ResponseEntity<>(categoryDto, HttpStatus.OK);
+		}
+	}
 	
-	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id) {
+		
+		Boolean deleted = categoryService.deleteCtegory(id);
+		if(deleted) {
+			return new ResponseEntity<>("Category deleted successfully", HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>("Category not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
