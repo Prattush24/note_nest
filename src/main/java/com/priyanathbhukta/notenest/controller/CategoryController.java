@@ -31,7 +31,7 @@ public class CategoryController {
 	
 	
 //	save-category api
-	@PostMapping("/save-category")
+	@PostMapping("/save")
 	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
