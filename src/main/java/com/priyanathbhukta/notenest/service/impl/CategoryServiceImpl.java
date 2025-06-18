@@ -2,7 +2,8 @@ package com.priyanathbhukta.notenest.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;import org.hibernate.dialect.function.DateTruncEmulation;
+import java.util.Optional;
+import org.hibernate.dialect.function.DateTruncEmulation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.priyanathbhukta.notenest.config.ProjectConfig;
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
+import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.repository.CategoryRepository;
 import com.priyanathbhukta.notenest.service.CategoryService;
 
@@ -78,13 +80,16 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryDto getCategoryById(Integer id) {
-		Optional<Category> findByCategory = categoryRepo.findByIdAndIsDeletedFalse(id);
-		if(findByCategory.isPresent()) {
-			Category category = findByCategory.get();
-			return mapper.map(category, CategoryDto.class);
-		}
-		return null;
+	public CategoryDto getCategoryById(Integer id) throws Exception {
+	    Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
+	        .orElseThrow(() -> new ResourceNotFoundException("Category not found with id=" + id));
+
+	    if (ObjectUtils.isEmpty(category)) {
+	    	category.getName().toUpperCase();
+	    	return mapper.map(category, CategoryDto.class);
+	    }
+	    return null;
+	    
 	}
 
 	@Override
