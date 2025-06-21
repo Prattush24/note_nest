@@ -1,5 +1,7 @@
 package com.priyanathbhukta.notenest.exception;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,5 +30,10 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleResourceNotFoundException(Exception e){
 		log.error("GlobalExceptionHandler :: handleResourceNotFoundException ::", e.getMessage());
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<Map<String, Object>> handleValidationException(ValidationException e){
+		return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
 	}
 }

@@ -13,8 +13,10 @@ import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
+import com.priyanathbhukta.notenest.exception.ValidationException;
 import com.priyanathbhukta.notenest.repository.CategoryRepository;
 import com.priyanathbhukta.notenest.service.CategoryService;
+import com.priyanathbhukta.notenest.util.Validation;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -29,15 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryServiceImpl(ProjectConfig projectConfig) {
         this.projectConfig = projectConfig;
     }
-
+    
+    @Autowired
+    private Validation validation;
+    
     @Override
     public Boolean saveCategory(CategoryDto categoryDto) {
-//        Category category = new Category();
-//        category.setName(categoryDto.getName());
-//        category.setDescription(categoryDto.getDescription());
-//        category.setIsActive(categoryDto.getIsActive());
     	
+    	
+    	//validation checking
+    	validation.categotyValidation(categoryDto);
     	Category category = mapper.map(categoryDto, Category.class);
+    	
     	if(ObjectUtils.isEmpty(category.getId())) {
     		category.setIsDeleted(false);
             category.setCreatedBy(1);

@@ -16,7 +16,9 @@ import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
+import com.priyanathbhukta.notenest.exception.ValidationException;
 import com.priyanathbhukta.notenest.service.CategoryService;
+import com.priyanathbhukta.notenest.util.Validation;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +34,8 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired
+	private Validation validation;
 	
 //	save-category api
 	@PostMapping("/save")
