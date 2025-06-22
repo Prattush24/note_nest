@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
+import com.priyanathbhukta.notenest.exception.ExistDataException;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.exception.ValidationException;
 import com.priyanathbhukta.notenest.service.CategoryService;
@@ -39,7 +40,7 @@ public class CategoryController {
 	
 //	save-category api
 	@PostMapping("/save")
-	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
+	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) throws ExistDataException{
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
 		if(saveCategory) {	

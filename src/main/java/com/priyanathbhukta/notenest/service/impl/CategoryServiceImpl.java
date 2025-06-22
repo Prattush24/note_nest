@@ -12,6 +12,7 @@ import com.priyanathbhukta.notenest.config.ProjectConfig;
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
+import com.priyanathbhukta.notenest.exception.ExistDataException;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.exception.ValidationException;
 import com.priyanathbhukta.notenest.repository.CategoryRepository;
@@ -36,11 +37,16 @@ public class CategoryServiceImpl implements CategoryService {
     private Validation validation;
     
     @Override
-    public Boolean saveCategory(CategoryDto categoryDto) {
-    	
+    public Boolean saveCategory(CategoryDto categoryDto)  throws ExistDataException{
     	
     	//validation checking
     	validation.categotyValidation(categoryDto);
+    	
+    	//check exist category 
+    	Boolean exist = categoryRepo.existsByName(categoryDto.getName().trim());
+    	if(exist) {
+    		throw new ExistDataException("Category alreay exists");
+    	}
     	Category category = mapper.map(categoryDto, Category.class);
     	
     	if(ObjectUtils.isEmpty(category.getId())) {

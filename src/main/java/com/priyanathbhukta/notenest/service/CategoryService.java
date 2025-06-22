@@ -5,10 +5,11 @@ import java.util.List;
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
 import com.priyanathbhukta.notenest.entity.Category;
+import com.priyanathbhukta.notenest.exception.ExistDataException;
 
 public interface CategoryService {
 	
-	public Boolean saveCategory(CategoryDto categoryDto);
+	public Boolean saveCategory(CategoryDto categoryDto) throws ExistDataException;
 	
 	public List<CategoryDto> getAllCategory();
 
