@@ -23,8 +23,8 @@ public class Validation {
 			if(ObjectUtils.isEmpty(categoryDto.getName())) {
 				error.put("name","name field  is empty or null");
 			}else {
-				if(categoryDto.getName().length() < 10) {
-					error.put("name","name is length is minimum 10");
+				if(categoryDto.getName().length() < 3) {
+					error.put("name","name is length is minimum 3");
 				}
 				if(categoryDto.getName().length() > 100) {
 					error.put("name","name is length is maximum 100");
@@ -34,14 +34,15 @@ public class Validation {
 			// Validation of description field
 			if(ObjectUtils.isEmpty(categoryDto.getDescription())) {
 				error.put("description","description field  is empty or null");
-			}else {
-				if(categoryDto.getDescription().length() < 10) {
-					error.put("description","description is length is minimum 10");
-				}
-				if(categoryDto.getDescription().length() > 100) {
-					error.put("description","description is length is maximum 100");
-				}
 			}
+//			else {
+//				if(categoryDto.getDescription().length() < 10) {
+//					error.put("description","description is length is minimum 10");
+//				}
+//				if(categoryDto.getDescription().length() > 100) {
+//					error.put("description","description is length is maximum 100");
+//				}
+//			}
 			
 			// Validation isActive field
 			if(ObjectUtils.isEmpty(categoryDto.getIsActive())) {
