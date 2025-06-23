@@ -3,8 +3,8 @@ package com.priyanathbhukta.notenest.dto;
 import java.util.Date;
 
 import com.priyanathbhukta.notenest.entity.Category;
-
-
+import com.priyanathbhukta.notenest.entity.FileDetails;
+	
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +33,22 @@ public class NotesDto {
     
     private Date updatedOn;
     
+    private FilesDto fileDetails;
     
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    //implementing inner class 
+    public static class FilesDto{
+    	
+    	private Integer id;
+    	
+    	private String originalFileName;
+    	
+    	private String displayFileName;
+
+    }
     
     @AllArgsConstructor
     @NoArgsConstructor
@@ -41,6 +56,7 @@ public class NotesDto {
     @Setter
     //implementing inner class 
     public static class CategoryDto{
+    	
     	private Integer id;
     	
     	private String name;
