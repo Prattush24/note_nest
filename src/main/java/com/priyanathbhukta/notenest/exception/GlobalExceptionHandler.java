@@ -39,11 +39,10 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(ValidationException.class)
-//	public ResponseEntity<Map<String, Object>> handleValidationException(ValidationException e)
+
 	public ResponseEntity<?> handleValidationException(ValidationException e){
 //		return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
 		
-//		return (ResponseEntity<Map<String, Object>>) CommonUtil.createErrorResponse(e.getErrors(), HttpStatus.BAD_REQUEST);
 		return  CommonUtil.createErrorResponse(e.getErrors(), HttpStatus.BAD_REQUEST);
 	}
 	
