@@ -90,18 +90,27 @@ public class CategoryServiceImpl implements CategoryService {
 		return Categorylist;	
 	}
 
+//	@Override
+//	public CategoryDto getCategoryById(Integer id) throws Exception {
+//	    Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
+//	        .orElseThrow(() -> new ResourceNotFoundException("Category not found with id=" + id));
+//
+//	    if (ObjectUtils.isEmpty(category)) {
+//	    	category.getName().toUpperCase();
+//	    	return mapper.map(category, CategoryDto.class);
+//	    }
+//	    return null;
+//	    
+//	}
+	
 	@Override
 	public CategoryDto getCategoryById(Integer id) throws Exception {
 	    Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Category not found with id=" + id));
 
-	    if (ObjectUtils.isEmpty(category)) {
-	    	category.getName().toUpperCase();
-	    	return mapper.map(category, CategoryDto.class);
-	    }
-	    return null;
-	    
+	    return mapper.map(category, CategoryDto.class);
 	}
+
 
 	@Override
 	public Boolean deleteCtegory(Integer id) {
