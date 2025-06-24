@@ -1,5 +1,6 @@
 package com.priyanathbhukta.notenest.exception;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -57,5 +58,11 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
 //		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class)
+	public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e){
+//		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 }

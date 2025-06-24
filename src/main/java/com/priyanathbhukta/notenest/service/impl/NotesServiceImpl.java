@@ -1,6 +1,7 @@
 package com.priyanathbhukta.notenest.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,6 +77,7 @@ public class NotesServiceImpl implements  NotesService{
 
 	    return false;
 	}
+
 
 
 	private FileDetails saveFileDetails(MultipartFile file) throws IOException {
@@ -157,5 +160,26 @@ public class NotesServiceImpl implements  NotesService{
 				.toList();
 		 
 	}
+
+
+	@Override
+	public byte[] downloadFile(FileDetails fileDetails) throws Exception {
+		
+//		FileDetails fileDtls =   fileRepo.findById(id)
+//				.orElseThrow(()->new ResourceNotFoundException("File is not available"));
+		FileInputStream io = new FileInputStream(fileDetails.getPath());
+		
+		//convert InputStream object to byte array
+		return StreamUtils.copyToByteArray(io);
+	}
+	
+	@Override
+	public FileDetails getFileDetails(Integer id) throws Exception {
+	    FileDetails fileDtls = fileRepo.findById(id.longValue())
+	        .orElseThrow(() -> new ResourceNotFoundException("File is not available"));
+	    return fileDtls;
+	}
+
+
 
 }
