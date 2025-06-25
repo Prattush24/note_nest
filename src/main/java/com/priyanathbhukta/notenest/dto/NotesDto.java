@@ -1,10 +1,12 @@
 package com.priyanathbhukta.notenest.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.priyanathbhukta.notenest.entity.Category;
 import com.priyanathbhukta.notenest.entity.FileDetails;
-	
+
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,10 @@ public class NotesDto {
     private Date updatedOn;
     
     private FilesDto fileDetails;
+    
+	private Boolean isDeleted;
+	
+	private LocalDateTime deletedOn;
     
     @AllArgsConstructor
     @NoArgsConstructor
