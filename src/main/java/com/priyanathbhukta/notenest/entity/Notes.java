@@ -1,11 +1,12 @@
 package com.priyanathbhukta.notenest.entity;
 
-
-
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -39,4 +40,10 @@ public class Notes extends BaseModel{
 
 	@ManyToOne
 	private FileDetails fileDetails;
+	
+	@Column(name = "is_deleted")
+	private Boolean isDeleted;
+	
+	@Column(name = "deleted_on")
+	private LocalDateTime deletedOn;
 }
