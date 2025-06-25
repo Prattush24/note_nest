@@ -9,12 +9,16 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.apache.catalina.mapper.Mapper;
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
@@ -23,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.priyanathbhukta.notenest.dto.NotesDto;
 import com.priyanathbhukta.notenest.dto.NotesDto.CategoryDto;
+import com.priyanathbhukta.notenest.dto.NotesResponse;
 import com.priyanathbhukta.notenest.entity.FileDetails;
 import com.priyanathbhukta.notenest.entity.Notes;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
@@ -38,6 +43,8 @@ public class NotesServiceImpl implements  NotesService{
 	@Autowired
 	private NotesRepository notesRepo;
 	
+	
+
 	@Autowired
 	private ModelMapper mapper;
 	
@@ -180,6 +187,29 @@ public class NotesServiceImpl implements  NotesService{
 	    return fileDtls;
 	}
 
-
-
+	@Override
+	public NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize) {
+		
+		// suppose i have 10 notes but 1 page can contain only 5 notes then it divides into 2 pages (5, 5)
+		
+			
+		//implement pagination on notes
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		Page<Notes> pageNotes =  notesRepo.findByCreatedBy(userId,pageable);
+		List<NotesDto> notesDto = pageNotes.get().map(n -> mapper.map(n,NotesDto.class)).toList();
+		NotesResponse notes = NotesResponse.builder()
+				.notes(notesDto)
+				.pageNo(pageNotes.getNumber())
+				.pageSize(pageNotes.getSize())
+				.totalElements(pageNotes.getTotalElements())
+				.totalPages(pageNotes.getTotalPages())
+				.isFirst(pageNotes.isFirst())
+				.isLast(pageNotes.isLast())
+				.build();
+		
+		
+		
+		return notes;
+	}
+	
 }
