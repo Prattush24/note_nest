@@ -29,14 +29,17 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.priyanathbhukta.notenest.dto.FavouriteNotesDto;
 import com.priyanathbhukta.notenest.dto.NotesDto;
 import com.priyanathbhukta.notenest.dto.NotesDto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.NotesDto.FilesDto;
 import com.priyanathbhukta.notenest.dto.NotesResponse;
+import com.priyanathbhukta.notenest.entity.FavouriteNotes;
 import com.priyanathbhukta.notenest.entity.FileDetails;
 import com.priyanathbhukta.notenest.entity.Notes;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.repository.CategoryRepository;
+import com.priyanathbhukta.notenest.repository.FavouriteNotesRepository;
 import com.priyanathbhukta.notenest.repository.FileRepository;
 import com.priyanathbhukta.notenest.repository.NotesRepository;
 import com.priyanathbhukta.notenest.service.NotesService;
@@ -48,7 +51,8 @@ public class NotesServiceImpl implements  NotesService{
 	@Autowired
 	private NotesRepository notesRepo;
 	
-	
+	@Autowired
+	private FavouriteNotesRepository favouriteNotesRepo;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -76,12 +80,9 @@ public class NotesServiceImpl implements  NotesService{
 			updateNotes(notesDto, file);
 		}
 		
-		
 	    // category validation
 	    checkCategoryExist(notesDto.getCategory());
-
-	    Notes notesMap = mapper.map(notesDto, Notes.class);
-	    
+	    Notes notesMap = mapper.map(notesDto, Notes.class);  
 	    FileDetails fileDtls =saveFileDetails(file);
 		if(!ObjectUtils.isEmpty(fileDtls)) {
 			notesMap.setFileDetails(fileDtls);
@@ -89,30 +90,22 @@ public class NotesServiceImpl implements  NotesService{
 		else {
 			if(ObjectUtils.isEmpty(fileDtls)) {
 				notesMap.setFileDetails(null);
-			}
-			
+			}		
 		}
 	    Notes saveNotes = notesRepo.save(notesMap);
-
 	    if (!ObjectUtils.isEmpty(saveNotes)) {
 	        return true;
 	    }
-
 	    return false;
 	}
-
-
 
 	private void updateNotes(NotesDto notesDto, MultipartFile file) throws Exception{
 		Notes existNotes = notesRepo.findById(notesDto.getId())
 				.orElseThrow(()-> new ResourceNotFoundException("Invalid notes id"));
 		if(ObjectUtils.isEmpty(file)) {
 			notesDto.setFileDetails(mapper.map(existNotes.getFileDetails(), FilesDto.class));
-		}
-		
+		}	
 	}
-
-
 
 	private FileDetails saveFileDetails(MultipartFile file) throws IOException {
 		
@@ -124,22 +117,18 @@ public class NotesServiceImpl implements  NotesService{
 			List<String> extensionAllow = Arrays.asList("pdf", "xlsx", "jpg","png", "docx", "txt");
 			if (!extensionAllow.contains(extension)) {
 			    throw new IllegalArgumentException("Invalid file format! Upload only .pdf, .xlsx, .jpg, .png, .docx, .txt");
-			}
-			
+			}		
 			String rndString = UUID.randomUUID().toString();
 			//String extension = FilenameUtils.getExtension(originalFileName);
 			String uploadFileName = rndString+"."+extension;
-			
-			
+				
 			File saveFile = new File(uploadPath);
 			if(!saveFile.exists()) {
 				saveFile.mkdir();
 			}
 			//path : notenestapiservice/notes/java.pdf
-			
 			String storePath = uploadPath.concat(uploadFileName);
-			
-			
+				
 			//upload file 
 			long upload = Files.copy(file.getInputStream(), Paths.get(storePath));
 			if(upload != 0) {
@@ -154,11 +143,8 @@ public class NotesServiceImpl implements  NotesService{
 				return saveFileDlts;
 			}
 		}
-		
-		
 		return null;
 	}
-
 
 	private String getDisplayName(String originalFileName) {
 		
@@ -175,13 +161,11 @@ public class NotesServiceImpl implements  NotesService{
 		return fileName;
 	}
 
-
 	private void checkCategoryExist(CategoryDto category) throws Exception {
 		// TODO Auto-generated method stub
 		
 		categoryRepo.findById(category.getId())
 			.orElseThrow(()->new ResourceNotFoundException("Category id invalid"));
-		
 	}
 
 	@Override
@@ -191,10 +175,8 @@ public class NotesServiceImpl implements  NotesService{
 				.findAll()
 				.stream()
 				.map(note->mapper.map(note, NotesDto.class))
-				.toList();
-		 
+				.toList();	 
 	}
-
 
 	@Override
 	public byte[] downloadFile(FileDetails fileDetails) throws Exception {
@@ -235,8 +217,6 @@ public class NotesServiceImpl implements  NotesService{
 		return notes;
 	}
 
-
-
 	@Override
 	public void softDeleteNotes(Integer id) throws Exception {
 		Notes notes = notesRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Notes id invalid! Not found"));
@@ -244,8 +224,6 @@ public class NotesServiceImpl implements  NotesService{
 		notes.setDeletedOn(LocalDateTime.now());
 		notesRepo.save(notes);
 	}
-
-
 
 	@Override
 	public void restoreNotes(Integer id) throws Exception {
@@ -256,16 +234,12 @@ public class NotesServiceImpl implements  NotesService{
 		
 	}
 
-
-
 	@Override
 	public List<NotesDto> getUserRecycleBinNotes(Integer userId) {
 		List<Notes> recycleNotes = notesRepo.findByCreatedByAndIsDeletedTrue(userId);
 		List<NotesDto> notesDtoList = recycleNotes.stream().map(note->mapper.map(note, NotesDto.class)).toList();
 		return notesDtoList;
 	}
-
-
 
 	@Override
 	public void hardDeleteNotes(Integer id) throws Exception {
@@ -277,8 +251,6 @@ public class NotesServiceImpl implements  NotesService{
 		}
 	}
 
-
-
 	@Override
 	public void emptyRecycleBin(int userId) throws Exception {
 		List<Notes> recycleNotes = notesRepo.findByCreatedByAndIsDeletedTrue(userId);
@@ -287,7 +259,34 @@ public class NotesServiceImpl implements  NotesService{
 		}
 	}
 
+	@Override
+	public void favouriteNotes(Integer noteId) throws Exception{
+		int userId = 1;
+		Notes notes = notesRepo.findById(noteId)
+			.orElseThrow(()-> new ResourceNotFoundException("Notes not found! Id invalid"));
+		FavouriteNotes favouriteNotes = FavouriteNotes.builder()
+				.notes(notes)
+				.userId(userId)
+				.build();
+		
+		favouriteNotesRepo.save(favouriteNotes);
+	}
 
+	@Override
+	public void unFavouriteNotes(Integer favouriteNoteId) throws Exception{
+		FavouriteNotes favNote = favouriteNotesRepo.findById(favouriteNoteId)
+				.orElseThrow(()-> new ResourceNotFoundException("Favourite Notes not found! Id invalid"));
+		favouriteNotesRepo.delete(favNote);
+	}
+	
+	@Override
+	public List<FavouriteNotesDto> getUserFavoriteNotes() {
+	   
+		int userId =1;
+		List<FavouriteNotes> favouriteNotes = favouriteNotesRepo.findByUserId(userId);
+		 return favouriteNotes.stream().map(fn->mapper.map(fn,FavouriteNotesDto.class)).toList();  
+	}	
 
+	
 	
 }
