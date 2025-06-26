@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.priyanathbhukta.notenest.dto.FavouriteNotesDto;
 import com.priyanathbhukta.notenest.dto.NotesDto;
 import com.priyanathbhukta.notenest.dto.NotesResponse;
 import com.priyanathbhukta.notenest.entity.FileDetails;
+
 
 public interface NotesService {
 	public Boolean saveNotes(String notes, MultipartFile file) throws Exception;
@@ -29,5 +31,12 @@ public interface NotesService {
 
 	public void emptyRecycleBin(int userId)throws Exception;
 
+	public void favouriteNotes(Integer noteId) throws Exception;
 	
+	public void unFavouriteNotes(Integer noteId) throws Exception;
+	
+
+	public List<FavouriteNotesDto> getUserFavoriteNotes() throws Exception;
+
+
 }
