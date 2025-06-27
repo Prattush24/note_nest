@@ -38,6 +38,7 @@ import com.priyanathbhukta.notenest.entity.FavouriteNotes;
 import com.priyanathbhukta.notenest.entity.FileDetails;
 import com.priyanathbhukta.notenest.entity.Notes;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
+import com.priyanathbhukta.notenest.exception.UnauthorizedException;
 import com.priyanathbhukta.notenest.repository.CategoryRepository;
 import com.priyanathbhukta.notenest.repository.FavouriteNotesRepository;
 import com.priyanathbhukta.notenest.repository.FileRepository;
@@ -285,6 +286,30 @@ public class NotesServiceImpl implements  NotesService{
 		int userId =1;
 		List<FavouriteNotes> favouriteNotes = favouriteNotesRepo.findByUserId(userId);
 		 return favouriteNotes.stream().map(fn->mapper.map(fn,FavouriteNotesDto.class)).toList();  
+	}
+
+	@Override
+	public Boolean copyNotes(Integer id, Integer userId) throws Exception {
+		Notes notes = notesRepo.findById(id)
+				.orElseThrow(()-> new ResourceNotFoundException("Notes not found! Id invalid"));
+		
+		// Validation: Check if the note was created by the current user
+		if (!notes.getCreatedBy().equals(userId)) {
+		    throw new UnauthorizedException("You can only copy notes created by you");
+		}
+		Notes copyNote = Notes.builder()
+				.title(notes.getTitle())
+				.description(notes.getDescription())
+				.category(notes.getCategory())
+				.isDeleted(false)
+				.fileDetails(null)
+				.build();
+		
+		Notes saveCopyNote = notesRepo.save(copyNote);
+		if(!ObjectUtils.isEmpty(saveCopyNote)) {
+			return true;
+		}
+		return false;
 	}	
 
 	

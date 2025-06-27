@@ -65,4 +65,8 @@ public class GlobalExceptionHandler {
 //		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException ex) {
+	    return CommonUtil.createErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN);
+	}
 }
