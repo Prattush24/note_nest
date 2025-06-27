@@ -1,5 +1,6 @@
 package com.priyanathbhukta.notenest.util;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -7,6 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import com.priyanathbhukta.notenest.dto.CategoryDto;
+import com.priyanathbhukta.notenest.dto.TodoDto;
+import com.priyanathbhukta.notenest.dto.TodoDto.StatusDto;
+import com.priyanathbhukta.notenest.enums.TodoStatus;
+import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.exception.ValidationException;
 
 @Component
@@ -59,5 +64,19 @@ public class Validation {
 		
 	}
 	
+	
+	public void todoValidation(TodoDto todo) throws Exception {
+		
+		StatusDto reqStatus = todo.getStatus();
+		Boolean statusFound = false;
+		for(TodoStatus st: TodoStatus.values()) {
+			if(st.getId().equals(reqStatus.getId())) {
+				statusFound = true;
+			}
+		}
+		if(!statusFound) {
+			throw new ResourceNotFoundException("invalid status");
+		}
+	}
 	
 }
