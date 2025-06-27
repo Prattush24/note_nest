@@ -1,6 +1,9 @@
 package com.priyanathbhukta.notenest.controller;
 
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.priyanathbhukta.notenest.dto.FavouriteNotesDto;
 import com.priyanathbhukta.notenest.dto.NotesDto;
 import com.priyanathbhukta.notenest.dto.NotesResponse;
 import com.priyanathbhukta.notenest.entity.FileDetails;
+import com.priyanathbhukta.notenest.entity.Notes;
+import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
+import com.priyanathbhukta.notenest.repository.NotesRepository;
 import com.priyanathbhukta.notenest.service.NotesService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
@@ -32,6 +39,7 @@ public class NotesController {
 	@Autowired
 	private NotesService notesService;
 	
+	private NotesRepository notesRepo;
 	
 	@PostMapping("/")
 	public ResponseEntity<?> saveNotes(@RequestParam String notes,
@@ -138,4 +146,83 @@ public class NotesController {
 	    }
 	    return CommonUtil.createErrorResponseMessage("Copy failed! Try Again", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@GetMapping("/export/{id}/pdf")
+	public ResponseEntity<byte[]> exportNoteToPdf(@PathVariable Integer id) throws Exception {
+	    try {
+	        byte[] data = notesService.exportNoteAsPdf(id);
+	        
+	        // Get proper filename from service
+	        String filename;
+	        try {
+	            filename = notesService.getNoteFilename(id, "pdf");
+	        } catch (Exception e) {
+	            filename = "note_" + id + ".pdf";
+	        }
+	        
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_PDF);
+	        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(filename).build());
+	        return new ResponseEntity<>(data, headers, HttpStatus.OK);
+	        
+	    } catch (ResourceNotFoundException e) {
+	        return (ResponseEntity<byte[]>) CommonUtil.createErrorResponseMessage("Note not found", HttpStatus.NOT_FOUND);
+	    } catch (Exception e) {
+	        return (ResponseEntity<byte[]>) CommonUtil.createErrorResponseMessage("Error exporting note: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
+	@GetMapping("/export/{id}/docx")
+	public ResponseEntity<byte[]> exportNoteToDocx(@PathVariable Integer id) throws Exception {
+	    try {
+	        byte[] data = notesService.exportNoteAsDocx(id);
+	        
+	        // Get proper filename from service
+	        String filename;
+	        try {
+	            filename = notesService.getNoteFilename(id, "docx");
+	        } catch (Exception e) {
+	            filename = "note_" + id + ".docx";
+	        }
+	        
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(filename).build());
+	        return new ResponseEntity<>(data, headers, HttpStatus.OK);
+	        
+	    } catch (ResourceNotFoundException e) {
+	        return (ResponseEntity<byte[]>) CommonUtil.createErrorResponseMessage("Note not found", HttpStatus.NOT_FOUND);
+	    } catch (Exception e) {
+	        return (ResponseEntity<byte[]>) CommonUtil.createErrorResponseMessage("Error exporting note: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
+	private String sanitizeFilename(String title) {
+		Object filename = null;
+		if (filename == null || ((String) filename).trim().isEmpty()) {
+	        return "note";
+	    }
+	    // Remove invalid characters and limit length
+	    String sanitized = ((String) filename).replaceAll("[^a-zA-Z0-9._-]", "_");
+	    return sanitized.length() > 50 ? sanitized.substring(0, 50) : sanitized;
+	}
+	
+	@GetMapping("/export/all/pdf")
+	public ResponseEntity<byte[]> exportAllNotesToPdf() throws Exception {
+	    try {
+	        Integer userId = 1; // You should get this from authentication context
+	        byte[] data = notesService.exportAllNotesAsPdf(userId);
+	        
+	        String filename = "all_notes_" + LocalDate.now() + ".pdf";
+	        
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_PDF);
+	        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(filename).build());
+	        return new ResponseEntity<>(data, headers, HttpStatus.OK);
+	        
+	    } catch (Exception e) {
+	        return (ResponseEntity<byte[]>) CommonUtil.createErrorResponseMessage("Error exporting all notes: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
 }

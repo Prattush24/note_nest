@@ -39,6 +39,14 @@ public interface NotesService {
 	public List<FavouriteNotesDto> getUserFavoriteNotes() throws Exception;
 
 	public Boolean copyNotes(Integer id, Integer userId) throws Exception;
+	
+	public byte[] exportNoteAsPdf(Integer noteId) throws Exception;
+	
+	public byte[] exportNoteAsDocx(Integer noteId) throws Exception;
+	
+	public String getNoteFilename(Integer noteId, String extension) throws Exception;
+
+	public byte[] exportAllNotesAsPdf(Integer userId) throws Exception;
 
 
 }
