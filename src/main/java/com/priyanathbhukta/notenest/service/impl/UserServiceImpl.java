@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.priyanathbhukta.notenest.dto.EmailRequest;
 import com.priyanathbhukta.notenest.dto.UserDto;
 import com.priyanathbhukta.notenest.entity.User;
 import com.priyanathbhukta.notenest.repository.RoleRepository;
@@ -28,8 +29,12 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private ModelMapper mapper;
 	
+	
+	@Autowired
+	private EmailService emailService;
+	
 	@Override
-	public Boolean register(UserDto userDto) {
+	public Boolean register(UserDto userDto) throws Exception {
 		
 		validation.userValidation(userDto);
 		
@@ -45,9 +50,31 @@ public class UserServiceImpl implements UserService{
 		User saveUser = userRepo.save(user);
 		
 		if(!ObjectUtils.isEmpty(saveUser)) {
+			//logic for sending email
+			emailSend(saveUser);
+			
 			return true;
 		}
 		return false;
+	}
+
+	private void emailSend(User saveUser) throws Exception {
+		
+		String message = "Hi, <b>"+saveUser.getFirstName()+"</b>"
+				+"<br> Your account has been successfully registered with NoteNest. We’re excited to have you as part of our community."
+				+"<br> Click the below link to verify and Acivate your account.<br>"
+				+"<a href = '#'>Verify Account</a> <br><br>"
+				+"Thanks <br> NoteNest.com";
+		
+		EmailRequest emailRequest = EmailRequest.builder()
+				.to(saveUser.getEmail())
+				.title("Account Creation Confirmation")
+				.subject("Account Created Successfully")
+				.message(message)
+				.build();
+		
+		emailService.sendEmail(emailRequest);
+		
 	}
 
 	@Override

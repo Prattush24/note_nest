@@ -16,7 +16,7 @@ import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final NotesSchedular notesSchedular;
