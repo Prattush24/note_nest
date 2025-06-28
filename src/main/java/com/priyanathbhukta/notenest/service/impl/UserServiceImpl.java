@@ -1,5 +1,8 @@
 package com.priyanathbhukta.notenest.service.impl;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.priyanathbhukta.notenest.dto.EmailRequest;
 import com.priyanathbhukta.notenest.dto.UserDto;
+import com.priyanathbhukta.notenest.entity.AccountStatus;
 import com.priyanathbhukta.notenest.entity.User;
 import com.priyanathbhukta.notenest.repository.RoleRepository;
 import com.priyanathbhukta.notenest.repository.UserRepository;
@@ -34,7 +38,7 @@ public class UserServiceImpl implements UserService{
 	private EmailService emailService;
 	
 	@Override
-	public Boolean register(UserDto userDto) throws Exception {
+	public Boolean register(UserDto userDto, String url) throws Exception {
 		
 		validation.userValidation(userDto);
 		
@@ -45,26 +49,35 @@ public class UserServiceImpl implements UserService{
 		if (userRepo.existsByMobNo(userDto.getMobNo())) {
 		    throw new IllegalArgumentException("User with this mobile number already exists");
 		}
-
+		
 		User user = mapper.map(userDto, User.class);
+		
+		AccountStatus status = AccountStatus.builder()
+				.isActive(false)
+				.verifcationCode(UUID.randomUUID().toString())
+				.build();
+		user.setStatus(status);
 		User saveUser = userRepo.save(user);
 		
 		if(!ObjectUtils.isEmpty(saveUser)) {
 			//logic for sending email
-			emailSend(saveUser);
+			emailSend(saveUser, url);
 			
 			return true;
 		}
 		return false;
 	}
 
-	private void emailSend(User saveUser) throws Exception {
+	private void emailSend(User saveUser, String url) throws Exception {
 		
-		String message = "Hi, <b>"+saveUser.getFirstName()+"</b>"
+		String message = "Hi, <b>[[username]]</b>"
 				+"<br> Your account has been successfully registered with NoteNest. We’re excited to have you as part of our community."
 				+"<br> Click the below link to verify and Acivate your account.<br>"
-				+"<a href = '#'>Verify Account</a> <br><br>"
+				+"<a href ='[[url]]'>Verify Account</a> <br><br>"
 				+"Thanks <br> NoteNest.com";
+		
+		message =  message.replace("[[username]]", saveUser.getFirstName());
+		message =  message.replace("[[url]]",url+"/api/v1/home/verify?uid="+saveUser.getId()+"&&code="+saveUser.getStatus().getVerifcationCode());
 		
 		EmailRequest emailRequest = EmailRequest.builder()
 				.to(saveUser.getEmail())
@@ -84,7 +97,5 @@ public class UserServiceImpl implements UserService{
 	    }
 	    userRepo.deleteById(id);
 	}
-	
-	
 	
 }

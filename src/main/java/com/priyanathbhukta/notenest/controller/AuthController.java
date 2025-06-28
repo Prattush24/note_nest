@@ -4,16 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.priyanathbhukta.notenest.dto.UserDto;
 import com.priyanathbhukta.notenest.schedular.NotesSchedular;
 import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -39,9 +43,11 @@ public class AuthController {
 //	}
     
     @PostMapping("/")
-    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto){
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto, HttpServletRequest request){
         try {
-            Boolean register = userService.register(userDto);
+        	
+        	String url = CommonUtil.geturl(request);
+            Boolean register = userService.register(userDto,url);
             if(register) {
                 return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
             } else {
