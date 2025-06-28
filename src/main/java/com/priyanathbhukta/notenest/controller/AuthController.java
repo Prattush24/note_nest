@@ -1,0 +1,69 @@
+package com.priyanathbhukta.notenest.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.priyanathbhukta.notenest.dto.UserDto;
+import com.priyanathbhukta.notenest.schedular.NotesSchedular;
+import com.priyanathbhukta.notenest.service.UserService;
+import com.priyanathbhukta.notenest.util.CommonUtil;
+
+@RestController
+@RequestMapping("/api/v1/user")
+public class AuthController {
+
+    private final NotesSchedular notesSchedular;
+	
+	@Autowired
+	private UserService userService;
+
+    AuthController(NotesSchedular notesSchedular) {
+        this.notesSchedular = notesSchedular;
+    }
+	
+//    @PostMapping("/")
+//	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto){
+//		Boolean register = userService.register(userDto);
+//		if(register) {
+//			return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
+//		}else {
+//			return CommonUtil.createErrorResponseMessage("Registration Failed", HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
+    
+    @PostMapping("/")
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto){
+        try {
+            Boolean register = userService.register(userDto);
+            if(register) {
+                return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
+            } else {
+                return CommonUtil.createErrorResponseMessage("Registration Failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (IllegalArgumentException ex) {
+            return CommonUtil.createErrorResponseMessage(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception ex) {
+            return CommonUtil.createErrorResponseMessage("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
+        try {
+            userService.deleteUserById(id);
+            return CommonUtil.createBuildResponse("User deleted successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return CommonUtil.createErrorResponseMessage(ex.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return CommonUtil.createErrorResponseMessage("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+}
