@@ -21,6 +21,7 @@ import com.priyanathbhukta.notenest.entity.AccountStatus;
 import com.priyanathbhukta.notenest.entity.User;
 import com.priyanathbhukta.notenest.repository.RoleRepository;
 import com.priyanathbhukta.notenest.repository.UserRepository;
+import com.priyanathbhukta.notenest.service.JwtService;
 import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.Validation;
 
@@ -49,6 +50,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	@Override
 	public Boolean register(UserDto userDto, String url) throws Exception {
@@ -118,7 +122,7 @@ public class UserServiceImpl implements UserService{
 		Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		if(authenticate.isAuthenticated()) {
 			CustomUserDetails customUserDetails = (CustomUserDetails)	authenticate.getPrincipal();
-			String token = "klhfgusdshushosyssjhhbjksghdh";
+			String token = jwtService.generateToken(customUserDetails.getUser());
 			LoginResponse loginResponse = LoginResponse.builder()
 					.user(mapper.map(customUserDetails.getUser(), UserDto.class))
 					.token(token)
