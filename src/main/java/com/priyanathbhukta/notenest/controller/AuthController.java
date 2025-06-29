@@ -1,8 +1,10 @@
 package com.priyanathbhukta.notenest.controller;
 
+import org.modelmapper.internal.bytebuddy.asm.Advice.OffsetMapping.ForOrigin.Renderer.ForReturnTypeName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.priyanathbhukta.notenest.dto.LoginRequest;
+import com.priyanathbhukta.notenest.dto.LoginResponse;
 import com.priyanathbhukta.notenest.dto.UserDto;
 import com.priyanathbhukta.notenest.schedular.NotesSchedular;
 import com.priyanathbhukta.notenest.service.UserService;
@@ -70,6 +74,18 @@ public class AuthController {
         } catch (Exception ex) {
             return CommonUtil.createErrorResponseMessage("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest )throws Exception{
+    	
+    	LoginResponse loginResponse = userService.login(loginRequest);
+    	if(ObjectUtils.isEmpty(loginResponse)) {
+    		return CommonUtil.createErrorResponseMessage("invalid credentials", HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	
+        return CommonUtil.createBuildResponse(loginResponse, HttpStatus.OK);
     }
 
 }
