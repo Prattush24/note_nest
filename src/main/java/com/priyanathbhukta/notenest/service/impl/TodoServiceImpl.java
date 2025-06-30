@@ -15,6 +15,7 @@ import com.priyanathbhukta.notenest.enums.TodoStatus;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.repository.TodoRepository;
 import com.priyanathbhukta.notenest.service.TodoService;
+import com.priyanathbhukta.notenest.util.CommonUtil;
 import com.priyanathbhukta.notenest.util.Validation;
 
 
@@ -69,7 +70,7 @@ public class TodoServiceImpl implements TodoService{
 
 	@Override
 	public List<TodoDto> getTodoByUser() {
-		Integer userId = 1;
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		List<Todo> todos = todoRepo.findByCreatedBy(userId);
 		return todos.stream().map(td->mapper.map(td, TodoDto.class)).toList();
 	}

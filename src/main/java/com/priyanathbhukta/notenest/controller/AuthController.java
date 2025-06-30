@@ -18,7 +18,7 @@ import com.priyanathbhukta.notenest.dto.LoginRequest;
 import com.priyanathbhukta.notenest.dto.LoginResponse;
 import com.priyanathbhukta.notenest.dto.UserRequest;
 import com.priyanathbhukta.notenest.schedular.NotesSchedular;
-import com.priyanathbhukta.notenest.service.UserService;
+import com.priyanathbhukta.notenest.service.AuthService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class AuthController {
     private final NotesSchedular notesSchedular;
 	
 	@Autowired
-	private UserService userService;
+	private AuthService authService;
 
     AuthController(NotesSchedular notesSchedular) {
         this.notesSchedular = notesSchedular;
@@ -51,7 +51,7 @@ public class AuthController {
         try {
         	
         	String url = CommonUtil.geturl(request);
-            Boolean register = userService.register(userDto,url);
+            Boolean register = authService.register(userDto,url);
             if(register) {
                 return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
             } else {
@@ -67,7 +67,7 @@ public class AuthController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         try {
-            userService.deleteUserById(id);
+            authService.deleteUserById(id);
             return CommonUtil.createBuildResponse("User deleted successfully", HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return CommonUtil.createErrorResponseMessage(ex.getMessage(), HttpStatus.NOT_FOUND);
@@ -79,7 +79,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest )throws Exception{
     	
-    	LoginResponse loginResponse = userService.login(loginRequest);
+    	LoginResponse loginResponse = authService.login(loginRequest);
     	if(ObjectUtils.isEmpty(loginResponse)) {
     		return CommonUtil.createErrorResponseMessage("invalid credentials", HttpStatus.BAD_REQUEST);
     	}
