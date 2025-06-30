@@ -19,17 +19,17 @@ public interface NotesService {
 
 	public FileDetails getFileDetails(Integer id) throws Exception;
 
-	public NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize);
+	public NotesResponse getAllNotesByUser( Integer pageNo, Integer pageSize);
 
 	public void softDeleteNotes(Integer id)throws Exception;
 
 	public void restoreNotes(Integer id) throws Exception;
 
-	public List<NotesDto> getUserRecycleBinNotes(Integer userId);
+	public List<NotesDto> getUserRecycleBinNotes();
 
 	public void hardDeleteNotes(Integer id) throws Exception;
 
-	public void emptyRecycleBin(int userId)throws Exception;
+	public void emptyRecycleBin()throws Exception;
 
 	public void favouriteNotes(Integer noteId) throws Exception;
 	
@@ -47,6 +47,4 @@ public interface NotesService {
 	public String getNoteFilename(Integer noteId, String extension) throws Exception;
 
 	public byte[] exportAllNotesAsPdf(Integer userId) throws Exception;
-
-
 }

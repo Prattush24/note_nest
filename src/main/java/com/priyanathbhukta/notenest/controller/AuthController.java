@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.priyanathbhukta.notenest.dto.LoginRequest;
 import com.priyanathbhukta.notenest.dto.LoginResponse;
-import com.priyanathbhukta.notenest.dto.UserDto;
+import com.priyanathbhukta.notenest.dto.UserRequest;
 import com.priyanathbhukta.notenest.schedular.NotesSchedular;
 import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
@@ -47,7 +47,7 @@ public class AuthController {
 //	}
     
     @PostMapping("/")
-    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto, HttpServletRequest request){
+    public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request){
         try {
         	
         	String url = CommonUtil.geturl(request);

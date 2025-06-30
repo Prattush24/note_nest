@@ -16,7 +16,7 @@ import com.priyanathbhukta.notenest.config.security.CustomUserDetails;
 import com.priyanathbhukta.notenest.dto.EmailRequest;
 import com.priyanathbhukta.notenest.dto.LoginRequest;
 import com.priyanathbhukta.notenest.dto.LoginResponse;
-import com.priyanathbhukta.notenest.dto.UserDto;
+import com.priyanathbhukta.notenest.dto.UserRequest;
 import com.priyanathbhukta.notenest.entity.AccountStatus;
 import com.priyanathbhukta.notenest.entity.User;
 import com.priyanathbhukta.notenest.repository.RoleRepository;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService{
 	private JwtService jwtService;
 	
 	@Override
-	public Boolean register(UserDto userDto, String url) throws Exception {
+	public Boolean register(UserRequest userDto, String url) throws Exception {
 		
 		validation.userValidation(userDto);
 		
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService{
 			CustomUserDetails customUserDetails = (CustomUserDetails)	authenticate.getPrincipal();
 			String token = jwtService.generateToken(customUserDetails.getUser());
 			LoginResponse loginResponse = LoginResponse.builder()
-					.user(mapper.map(customUserDetails.getUser(), UserDto.class))
+					.user(mapper.map(customUserDetails.getUser(), UserRequest.class))
 					.token(token)
 					.build();
 			return loginResponse;
