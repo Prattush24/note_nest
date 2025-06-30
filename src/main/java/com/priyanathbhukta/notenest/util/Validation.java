@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.TodoDto;
 import com.priyanathbhukta.notenest.dto.TodoDto.StatusDto;
-import com.priyanathbhukta.notenest.dto.UserDto;
+import com.priyanathbhukta.notenest.dto.UserRequest;
 import com.priyanathbhukta.notenest.enums.TodoStatus;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
 import com.priyanathbhukta.notenest.exception.ValidationException;
@@ -90,7 +90,7 @@ public class Validation {
 		}
 	}
 	
-	public void userValidation(UserDto userDto){
+	public void userValidation(UserRequest userDto){
 		
 		//1. First name validation
 		if(!StringUtils.hasText(userDto.getFirstName())) {

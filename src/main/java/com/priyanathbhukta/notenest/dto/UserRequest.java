@@ -18,7 +18,7 @@ import lombok.Setter;
 @Builder
 
 
-public class UserDto {
+public class UserRequest {
 	
 	private Integer id;
 	
