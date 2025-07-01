@@ -2,7 +2,7 @@ spring:
     application:
         name: NoteNest-API-Service
     profiles:
-        active: dev
+        active: test
 
 ---
 #Dev Config
