@@ -81,14 +81,14 @@ public class AuthServiceImpl implements AuthService{
 		
 		if(!ObjectUtils.isEmpty(saveUser)) {
 			//logic for sending email
-			emailSend(saveUser, url);
+			emailSendForRegister(saveUser, url);
 			
 			return true;
 		}
 		return false;
 	}
 
-	private void emailSend(User saveUser, String url) throws Exception {
+	private void emailSendForRegister(User saveUser, String url) throws Exception {
 		
 		String message = "Hi, <b>[[username]]</b>"
 				+"<br> Your account has been successfully registered with NoteNest. We’re excited to have you as part of our community."
