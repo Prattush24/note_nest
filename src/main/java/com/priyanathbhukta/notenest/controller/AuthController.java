@@ -1,0 +1,91 @@
+package com.priyanathbhukta.notenest.controller;
+
+import org.modelmapper.internal.bytebuddy.asm.Advice.OffsetMapping.ForOrigin.Renderer.ForReturnTypeName;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.priyanathbhukta.notenest.dto.LoginRequest;
+import com.priyanathbhukta.notenest.dto.LoginResponse;
+import com.priyanathbhukta.notenest.dto.UserRequest;
+import com.priyanathbhukta.notenest.schedular.NotesSchedular;
+import com.priyanathbhukta.notenest.service.AuthService;
+import com.priyanathbhukta.notenest.util.CommonUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+public class AuthController {
+
+    private final NotesSchedular notesSchedular;
+	
+	@Autowired
+	private AuthService authService;
+
+    AuthController(NotesSchedular notesSchedular) {
+        this.notesSchedular = notesSchedular;
+    }
+	
+//    @PostMapping("/")
+//	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto){
+//		Boolean register = userService.register(userDto);
+//		if(register) {
+//			return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
+//		}else {
+//			return CommonUtil.createErrorResponseMessage("Registration Failed", HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
+    
+    @PostMapping("/")
+    public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request){
+        try {
+        	
+        	String url = CommonUtil.geturl(request);
+            Boolean register = authService.register(userDto,url);
+            if(register) {
+                return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
+            } else {
+                return CommonUtil.createErrorResponseMessage("Registration Failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (IllegalArgumentException ex) {
+            return CommonUtil.createErrorResponseMessage(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception ex) {
+            return CommonUtil.createErrorResponseMessage("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
+        try {
+            authService.deleteUserById(id);
+            return CommonUtil.createBuildResponse("User deleted successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException ex) {
+            return CommonUtil.createErrorResponseMessage(ex.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return CommonUtil.createErrorResponseMessage("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest )throws Exception{
+    	
+    	LoginResponse loginResponse = authService.login(loginRequest);
+    	if(ObjectUtils.isEmpty(loginResponse)) {
+    		return CommonUtil.createErrorResponseMessage("invalid credentials", HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	
+        return CommonUtil.createBuildResponse(loginResponse, HttpStatus.OK);
+    }
+
+}
