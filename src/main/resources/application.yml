@@ -1,0 +1,180 @@
+spring:
+    application:
+        name: NoteNest-API-Service
+    profiles:
+        active: uat
+
+---
+#Dev Config
+
+
+spring:
+    config:
+        activate:
+            on-profile: dev
+    application:
+        name: NoteNest-API-Service
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: P@B@titas$0220
+        url: jdbc:mysql://localhost:3306/notenest_dev
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+    mail:
+        host: smtp.gmail.com
+        password: ypae wunz akcb hsen
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: bhuktapriyanath@gmail.com
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+file:
+    upload:
+        path: notes/
+logging:
+    level:
+        org:
+            hibernate: "DEBUG\t"
+            springframework: DEBUG
+
+---
+#Test Config
+
+spring:
+    config:
+        activate:
+            on-profile: test
+    application:
+        name: NoteNest-API-Service
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: P@B@titas$0220
+        url: jdbc:mysql://localhost:3306/notenest_test
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+    mail:
+        host: smtp.gmail.com
+        password: ypae wunz akcb hsen
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: bhuktapriyanath@gmail.com
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+file:
+    upload:
+        path: notes/
+logging:
+    level:
+        org:
+            hibernate: "DEBUG\t"
+            springframework: DEBUG
+---
+#UAT Config
+
+spring:
+    config:
+        activate:
+            on-profile: uat
+    application:
+        name: NoteNest-API-Service
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: P@B@titas$0220
+        url: jdbc:mysql://localhost:3306/notenest_uat
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+    mail:
+        host: smtp.gmail.com
+        password: ypae wunz akcb hsen
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: bhuktapriyanath@gmail.com
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+file:
+    upload:
+        path: notes/
+logging:
+    level:
+        org:
+            hibernate: "DEBUG\t"
+            springframework: DEBUG
+---
+#Prod Config
+
+spring:
+    config:
+        activate:
+            on-profile: prod
+    application:
+        name: NoteNest-API-Service
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: P@B@titas$0220
+        url: jdbc:mysql://localhost:3306/notenest_prod
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+    mail:
+        host: smtp.gmail.com
+        password: ypae wunz akcb hsen
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        username: bhuktapriyanath@gmail.com
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+file:
+    upload:
+        path: notes/
+logging:
+    level:
+        org:
+            hibernate: "DEBUG\t"
+            springframework: DEBUG
