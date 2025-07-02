@@ -31,6 +31,7 @@ public class HomeController implements HomeControllerEndpoint {
 	
 	@Override
 	public  ResponseEntity<?> verifyUserAccount(@RequestParam Integer uid, @RequestParam String code) throws Exception{
+		
 		Boolean verifyAccount = homeService.verifyAccount(uid, code);
 		if(verifyAccount) {
 			return CommonUtil.createBuildResponseMessage("Account verification successfull", HttpStatus.OK);
