@@ -16,7 +16,11 @@ import com.priyanathbhukta.notenest.entity.User;
 import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
+import lombok.extern.slf4j.Slf4j;
 
+
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {

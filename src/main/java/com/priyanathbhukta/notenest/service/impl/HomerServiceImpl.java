@@ -10,7 +10,10 @@ import com.priyanathbhukta.notenest.exception.SuccessException;
 import com.priyanathbhukta.notenest.repository.UserRepository;
 import com.priyanathbhukta.notenest.service.HomeService;
 
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Component
 public class HomerServiceImpl implements HomeService{
 	
@@ -37,12 +40,14 @@ public class HomerServiceImpl implements HomeService{
 	
 	@Override
 	public Boolean verifyAccount(Integer userId, String verificationCode) throws Exception {
+		log.info("HomerServiceImpl : verifyAccount(): Start");
 	    User user = userRepo.findById(userId)
 	                        .orElseThrow(() -> new ResourceNotFoundException("Invalid user"));
 
 	    AccountStatus status = user.getStatus();
 	    
 	    if(status.getVerifcationCode() == null) {
+	    	log.info("message :Account already verified");
 	    	throw new SuccessException("Account already verified");
 	    }
 
@@ -50,9 +55,10 @@ public class HomerServiceImpl implements HomeService{
 	        status.setIsActive(true);
 	        status.setVerifcationCode(null);
 	        userRepo.save(user);
+	        log.info("message :Account verification success");
 	        return true;
 	    }
-
+	    log.info("HomerServiceImpl : verifyAccount(): End");
 	    return false;
 	}
 
