@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.priyanathbhukta.notenest.dto.PasswordChngRequest;
 import com.priyanathbhukta.notenest.dto.UserResponse;
+import com.priyanathbhukta.notenest.endpoint.UserControllerEndpoint;
 import com.priyanathbhukta.notenest.entity.User;
 import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
@@ -19,7 +20,7 @@ import com.priyanathbhukta.notenest.util.CommonUtil;
 
 @RestController
 @RequestMapping("/api/v1/user")
-public class UserController {
+public class UserController implements UserControllerEndpoint {
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -27,14 +28,14 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/profile")
+	@Override
 	public ResponseEntity<?> getProfile(){
 		User loggedInUser = CommonUtil.getLoggedInUser();
 		UserResponse userResponse = mapper.map(loggedInUser, UserResponse.class);
 		return CommonUtil.createBuildResponse(userResponse,HttpStatus.OK);
 	}
 	
-	@PostMapping("/chng-pswd")
+	@Override
 	public ResponseEntity<?> changePassword(@RequestBody PasswordChngRequest passwordRequest){
 		userService.changePassword(passwordRequest);
 		return CommonUtil.createBuildResponseMessage("Password change successfully",HttpStatus.OK);

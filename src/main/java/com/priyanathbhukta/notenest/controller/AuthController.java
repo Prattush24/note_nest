@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.priyanathbhukta.notenest.dto.LoginRequest;
 import com.priyanathbhukta.notenest.dto.LoginResponse;
 import com.priyanathbhukta.notenest.dto.UserRequest;
+import com.priyanathbhukta.notenest.endpoint.AuthControllerEndpoint;
 import com.priyanathbhukta.notenest.schedular.NotesSchedular;
 import com.priyanathbhukta.notenest.service.AuthService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
@@ -25,7 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthControllerEndpoint {
 
     private final NotesSchedular notesSchedular;
 	
@@ -46,7 +47,7 @@ public class AuthController {
 //		}
 //	}
     
-    @PostMapping("/")
+    @Override
     public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request){
         try {
         	
@@ -64,7 +65,7 @@ public class AuthController {
         }
     }
     
-    @DeleteMapping("/{id}")
+   @Override
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         try {
             authService.deleteUserById(id);
@@ -76,15 +77,13 @@ public class AuthController {
         }
     }
     
-    @PostMapping("/login")
+    @Override
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest )throws Exception{
     	
     	LoginResponse loginResponse = authService.login(loginRequest);
     	if(ObjectUtils.isEmpty(loginResponse)) {
     		return CommonUtil.createErrorResponseMessage("invalid credentials", HttpStatus.BAD_REQUEST);
     	}
-    	
-    	
         return CommonUtil.createBuildResponse(loginResponse, HttpStatus.OK);
     }
 
