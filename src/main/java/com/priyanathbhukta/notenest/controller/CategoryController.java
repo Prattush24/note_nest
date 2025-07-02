@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.dto.CategoryResponse;
+import com.priyanathbhukta.notenest.endpoint.CategoryControllerEndpoint;
 import com.priyanathbhukta.notenest.entity.Category;
 import com.priyanathbhukta.notenest.exception.ExistDataException;
 import com.priyanathbhukta.notenest.exception.ResourceNotFoundException;
@@ -32,7 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/category")
-public class CategoryController {
+public class CategoryController  implements CategoryControllerEndpoint{
 	
 	@Autowired
 	private CategoryService categoryService;
@@ -41,8 +42,7 @@ public class CategoryController {
 	private Validation validation;
 	
 //	save-category api
-	@PostMapping("/save")
-	@PreAuthorize("hasRole('ADMIN')")
+	@Override
 	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) throws ExistDataException{
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
@@ -56,8 +56,8 @@ public class CategoryController {
 	
 	
 //	Category api for get all categories
-	@GetMapping("/")
-	@PreAuthorize("hasRole('ADMIN')")
+	
+	@Override
 	public ResponseEntity<?> getAllCategory(){
 //		String nm =null;
 //		nm.toUpperCase();
@@ -71,8 +71,8 @@ public class CategoryController {
 		
 	}
 	
-	@GetMapping("/active")
-	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+	
+	@Override
 	public ResponseEntity<?> getActiveCategory(){
 		
 		List<CategoryResponse> activeCategory = categoryService.getActiveCategory();
@@ -85,11 +85,9 @@ public class CategoryController {
 		}
 		
 	}
-	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	
+	@Override
 	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception{
-		
-
 		CategoryDto categoryDto = categoryService.getCategoryById(id);
 		if(ObjectUtils.isEmpty(categoryDto)){
 //			return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -101,8 +99,8 @@ public class CategoryController {
 		}
 	}
 	
-	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	
+	@Override
 	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id) {
 		
 		Boolean deleted = categoryService.deleteCtegory(id);
