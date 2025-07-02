@@ -22,7 +22,10 @@ import com.priyanathbhukta.notenest.service.AuthService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -49,17 +52,20 @@ public class AuthController {
     @PostMapping("/")
     public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request){
         try {
-        	
+        	log.info("AuthController : registerUser() : Execution Start");
         	String url = CommonUtil.geturl(request);
             Boolean register = authService.register(userDto,url);
             if(register) {
+            	log.info("AuthController :: registerUser() : Execution End");
                 return CommonUtil.createBuildResponse("Register Successfully", HttpStatus.CREATED);
             } else {
+            	log.info("Error : {}","Registration Failed");
                 return CommonUtil.createErrorResponseMessage("Registration Failed", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (IllegalArgumentException ex) {
             return CommonUtil.createErrorResponseMessage(ex.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
+        	log.info("Error : {}","Something went wrong");
             return CommonUtil.createErrorResponseMessage("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,5 +1,6 @@
 package com.priyanathbhukta.notenest.controller;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,17 @@ import com.priyanathbhukta.notenest.service.HomeService;
 import com.priyanathbhukta.notenest.service.UserService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/home")
 public class HomeController {
+	
+	Logger log = org.slf4j.LoggerFactory.getLogger(HomeController.class); 
 	
 	@Autowired
 	private HomeService homeService;
@@ -31,11 +38,12 @@ public class HomeController {
 	
 	@GetMapping("/verify")
 	public  ResponseEntity<?> verifyUserAccount(@RequestParam Integer uid, @RequestParam String code) throws Exception{
-		
+		log.info("HomeController :: verifyUserAccount() : Execution Start");
 		Boolean verifyAccount = homeService.verifyAccount(uid, code);
 		if(verifyAccount) {
 			return CommonUtil.createBuildResponseMessage("Account verification successfull", HttpStatus.OK);
 		}
+		log.info("HomeController :: verifyUserAccount() : Execution End");
 		return CommonUtil.createErrorResponseMessage("Invalid verification link", HttpStatus.BAD_REQUEST);
 	}
 	
