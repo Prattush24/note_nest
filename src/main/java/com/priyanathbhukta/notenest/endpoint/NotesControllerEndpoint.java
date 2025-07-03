@@ -8,46 +8,53 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import static com.priyanathbhukta.notenest.util.Constants.ROLE_USER;
+import static com.priyanathbhukta.notenest.util.Constants.ROLE_ADMIN;
+import static com.priyanathbhukta.notenest.util.Constants.DEFAULT_PAGE_NO;
+import static com.priyanathbhukta.notenest.util.Constants.DEFAULT_PAGE_SIZE;
+
+
+
 
 public interface NotesControllerEndpoint {
 	
 	@PostMapping("/")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> saveNotes(@RequestParam String notes,
 			@RequestParam (required = false)MultipartFile file) throws Exception;
 	
 	@GetMapping("/download/{id}")
-	@PreAuthorize("hasaNYRole('USER','ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception;
 	
 	@GetMapping("/")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> getAllNotes();
 	
 	@GetMapping("/search")
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<?> seacrhNotes(@RequestParam(name="key", defaultValue = "")String key,@RequestParam(name="pageNo", defaultValue = "0") Integer pageNo,
-	@RequestParam(name="pageSize", defaultValue = "10") Integer pageSize);
+	@PreAuthorize(ROLE_USER)
+	public ResponseEntity<?> seacrhNotes(@RequestParam(name="key", defaultValue = "")String key,@RequestParam(name="pageNo", defaultValue = DEFAULT_PAGE_NO) Integer pageNo,
+	@RequestParam(name="pageSize", defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize);
 	
 	@GetMapping("/user-notes")
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<?> getAllNotesByUser(@RequestParam(name="pageNo", defaultValue = "0") Integer pageNo,
-	@RequestParam(name="pageSize", defaultValue = "10") Integer pageSize);
+	@PreAuthorize(ROLE_USER)
+	public ResponseEntity<?> getAllNotesByUser(@RequestParam(name="pageNo", defaultValue = DEFAULT_PAGE_NO) Integer pageNo,
+	@RequestParam(name="pageSize", defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize);
 	
 	@GetMapping("/delete/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception;
 	
 	@GetMapping("/restore/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception;
 	
 	@GetMapping("/recycle-bin")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> getUserRecycleBinNotes() throws Exception;
 	
 	@DeleteMapping("/delete/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception;
 	
 	@DeleteMapping("/delete")
@@ -55,31 +62,31 @@ public interface NotesControllerEndpoint {
 	public ResponseEntity<?> emptyUserRecycleBin() throws Exception;
 	
 	@GetMapping("/fav/{noteId}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> favouriteNote(@PathVariable Integer noteId) throws Exception;
 	
 	@DeleteMapping("/un-fav/{favNoteId}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> unFavouriteNote(@PathVariable Integer favNoteId) throws Exception;
 	
 	@GetMapping("/fav-notes")
-	@PreAuthorize("hasRole('USER')")	
+	@PreAuthorize(ROLE_USER)	
 	public ResponseEntity<?> getUserFavouriteNote() throws Exception;
 	
 	@GetMapping("/copy/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> copyNotes(@PathVariable Integer id) throws Exception;
 	
 	@GetMapping("/export/{id}/pdf")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<byte[]> exportNoteToPdf(@PathVariable Integer id) throws Exception ;
 	
 	@GetMapping("/export/{id}/docx")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<byte[]> exportNoteToDocx(@PathVariable Integer id) throws Exception;
 	
 	@GetMapping("/export/all/pdf")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<byte[]> exportAllNotesToPdf() throws Exception;
 	
 	

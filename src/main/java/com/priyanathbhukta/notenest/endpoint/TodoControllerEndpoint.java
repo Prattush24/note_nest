@@ -6,22 +6,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import com.priyanathbhukta.notenest.dto.TodoDto;
+import static com.priyanathbhukta.notenest.util.Constants.ROLE_USER;
+
 
 public interface TodoControllerEndpoint {
 	
 	
 	@PostMapping("/")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> saveTodo(@RequestBody TodoDto todo) throws Exception;
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> getTodoById(@PathVariable Integer id) throws Exception ;
 	
 	@GetMapping("/list")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> getAllTodoByUser() throws Exception ;
 	
 }

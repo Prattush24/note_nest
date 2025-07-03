@@ -43,7 +43,7 @@ public class CategoryController  implements CategoryControllerEndpoint{
 	
 //	save-category api
 	@Override
-	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) throws ExistDataException{
+	public ResponseEntity<?> saveCategory(CategoryDto categoryDto) throws ExistDataException{
 		
 		Boolean saveCategory = categoryService.saveCategory(categoryDto);
 		if(saveCategory) {	
@@ -87,7 +87,7 @@ public class CategoryController  implements CategoryControllerEndpoint{
 	}
 	
 	@Override
-	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception{
+	public ResponseEntity<?> getCategoryDetailsById(Integer id) throws Exception{
 		CategoryDto categoryDto = categoryService.getCategoryById(id);
 		if(ObjectUtils.isEmpty(categoryDto)){
 //			return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -101,7 +101,7 @@ public class CategoryController  implements CategoryControllerEndpoint{
 	
 	
 	@Override
-	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id) {
+	public ResponseEntity<?> deleteCategoryById( Integer id) {
 		
 		Boolean deleted = categoryService.deleteCtegory(id);
 		if(deleted) {
