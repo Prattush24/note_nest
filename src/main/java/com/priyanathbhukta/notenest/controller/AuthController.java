@@ -1,4 +1,4 @@
-package com.priyanathbhukta.notenest.controller;
+	package com.priyanathbhukta.notenest.controller;
 
 import org.modelmapper.internal.bytebuddy.asm.Advice.OffsetMapping.ForOrigin.Renderer.ForReturnTypeName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class AuthController implements AuthControllerEndpoint {
 //	}
     
     @Override
-    public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request){
+    public ResponseEntity<?> registerUser(UserRequest userDto, HttpServletRequest request){
         try {
         	log.info("AuthController : registerUser() : Execution Start");
         	String url = CommonUtil.geturl(request);
@@ -72,7 +72,7 @@ public class AuthController implements AuthControllerEndpoint {
     }
     
    @Override
-    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteUser( Integer id) {
         try {
             authService.deleteUserById(id);
             return CommonUtil.createBuildResponse("User deleted successfully", HttpStatus.OK);
@@ -84,7 +84,7 @@ public class AuthController implements AuthControllerEndpoint {
     }
     
     @Override
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest )throws Exception{
+    public ResponseEntity<?> login(LoginRequest loginRequest )throws Exception{
     	
     	LoginResponse loginResponse = authService.login(loginRequest);
     	if(ObjectUtils.isEmpty(loginResponse)) {
