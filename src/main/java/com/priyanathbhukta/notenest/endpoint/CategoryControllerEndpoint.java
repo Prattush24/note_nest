@@ -10,28 +10,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.priyanathbhukta.notenest.dto.CategoryDto;
 import com.priyanathbhukta.notenest.exception.ExistDataException;
+import static com.priyanathbhukta.notenest.util.Constants.ROLE_ADMIN;
+import static com.priyanathbhukta.notenest.util.Constants.ROLE_ADMIN_USER;
 
 public interface CategoryControllerEndpoint {
 	
 	
 	@PostMapping("/save")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto) throws ExistDataException;
 	
 	@GetMapping("/")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> getAllCategory();
 	
 	@GetMapping("/active")
-	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+	@PreAuthorize(ROLE_ADMIN_USER)
 	public ResponseEntity<?> getActiveCategory();
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception;
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id);
 	
 	

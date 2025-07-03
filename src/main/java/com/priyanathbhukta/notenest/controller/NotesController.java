@@ -44,8 +44,7 @@ public class NotesController implements NotesControllerEndpoint {
 	private NotesRepository notesRepo;
 	
 	@Override
-	public ResponseEntity<?> saveNotes(@RequestParam String notes,
-			@RequestParam (required = false)MultipartFile file) throws Exception{
+	public ResponseEntity<?> saveNotes( String notes, MultipartFile file) throws Exception{
 		Boolean saveNotes = notesService.saveNotes(notes, file);
 		if(saveNotes) {
 			return CommonUtil.createBuildResponseMessage("notes saved successfully", HttpStatus.CREATED);
@@ -54,7 +53,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception{
+	public ResponseEntity<?> downloadFile( Integer id) throws Exception{
 		
 		FileDetails fileDetails = notesService.getFileDetails(id);	
 		byte[] data =  notesService.downloadFile(fileDetails);
@@ -77,8 +76,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> seacrhNotes(@RequestParam(name="key", defaultValue = "")String key,@RequestParam(name="pageNo", defaultValue = "0") Integer pageNo,
-	@RequestParam(name="pageSize", defaultValue = "10") Integer pageSize){
+	public ResponseEntity<?> seacrhNotes(String key, Integer pageNo, Integer pageSize){
 		
 		NotesResponse notes = notesService.getNotesByUserSearch(pageNo,pageSize,key);
 //		if(CollectionUtils.isEmpty(notes)) {
@@ -88,8 +86,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> getAllNotesByUser(@RequestParam(name="pageNo", defaultValue = "0") Integer pageNo,
-	@RequestParam(name="pageSize", defaultValue = "10") Integer pageSize){
+	public ResponseEntity<?> getAllNotesByUser(Integer pageNo, Integer pageSize){
 		
 		NotesResponse notes = notesService.getAllNotesByUser(pageNo,pageSize);
 //		if(CollectionUtils.isEmpty(notes)) {
@@ -99,13 +96,13 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception{
+	public ResponseEntity<?> deleteNotes( Integer id) throws Exception{
 		notesService.softDeleteNotes(id);
 		return CommonUtil.createBuildResponseMessage("Deleted successfully", HttpStatus.OK);
 	}
 	
 	@Override
-	public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception{
+	public ResponseEntity<?> restoreNotes(Integer id) throws Exception{
 		notesService.restoreNotes(id);
 		return CommonUtil.createBuildResponseMessage("Restored successfully", HttpStatus.OK);
 	}
@@ -120,7 +117,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception{
+	public ResponseEntity<?> hardDeleteNotes(Integer id) throws Exception{
 		notesService.hardDeleteNotes(id);
 		return CommonUtil.createBuildResponseMessage("Deleted successfully", HttpStatus.OK);
 	}
@@ -131,12 +128,12 @@ public class NotesController implements NotesControllerEndpoint {
 		return CommonUtil.createBuildResponseMessage("Deleted successfully", HttpStatus.OK);
 	}
 	@Override
-	public ResponseEntity<?> favouriteNote(@PathVariable Integer noteId) throws Exception{	
+	public ResponseEntity<?> favouriteNote( Integer noteId) throws Exception{	
 		notesService.favouriteNotes(noteId);
 		return CommonUtil.createBuildResponseMessage("Note added to Favourite", HttpStatus.CREATED);
 	}
 	@Override
-	public ResponseEntity<?> unFavouriteNote(@PathVariable Integer favNoteId) throws Exception{	
+	public ResponseEntity<?> unFavouriteNote(Integer favNoteId) throws Exception{	
 		notesService.unFavouriteNotes(favNoteId);
 		return CommonUtil.createBuildResponseMessage("Notes remove from Favourite", HttpStatus.OK);
 	}
@@ -150,7 +147,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> copyNotes(@PathVariable Integer id) throws Exception {
+	public ResponseEntity<?> copyNotes( Integer id) throws Exception {
 		Integer userId = CommonUtil.getLoggedInUser().getId(); // You should get this from authentication context
 	    Boolean copyNotes = notesService.copyNotes(id, userId);
 	    if (copyNotes) {
@@ -160,7 +157,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<byte[]> exportNoteToPdf(@PathVariable Integer id) throws Exception {
+	public ResponseEntity<byte[]> exportNoteToPdf( Integer id) throws Exception {
 	    try {
 	        byte[] data = notesService.exportNoteAsPdf(id);
 	        
@@ -185,7 +182,7 @@ public class NotesController implements NotesControllerEndpoint {
 	}
 
 	@Override
-	public ResponseEntity<byte[]> exportNoteToDocx(@PathVariable Integer id) throws Exception {
+	public ResponseEntity<byte[]> exportNoteToDocx( Integer id) throws Exception {
 	    try {
 	        byte[] data = notesService.exportNoteAsDocx(id);
 	        

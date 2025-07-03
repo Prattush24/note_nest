@@ -43,11 +43,11 @@ spring:
 file:
     upload:
         path: notes/
-logging:
-    level:
-        org:
-            hibernate: "DEBUG\t"
-            springframework: DEBUG
+#logging:
+#    level:
+#        org:
+#            hibernate: "DEBUG\t"
+#            springframework: DEBUG
 
 ---
 #Test Config
@@ -87,11 +87,11 @@ spring:
 file:
     upload:
         path: notes/
-logging:
-    level:
-        org:
-            hibernate: "DEBUG\t"
-            springframework: DEBUG
+#logging:
+#    level:
+#        org:
+#            hibernate: "DEBUG\t"
+#            springframework: DEBUG
 ---
 #UAT Config
 
@@ -130,11 +130,11 @@ spring:
 file:
     upload:
         path: notes/
-logging:
-    level:
-        org:
-            hibernate: "DEBUG\t"
-            springframework: DEBUG
+#logging:
+#    level:
+#        org:
+#            hibernate: "DEBUG\t"
+#            springframework: DEBUG
 ---
 #Prod Config
 
@@ -173,8 +173,8 @@ spring:
 file:
     upload:
         path: notes/
-logging:
-    level:
-        org:
-            hibernate: "DEBUG\t"
-            springframework: DEBUG
+#logging:
+#    level:
+#        org:
+#            hibernate: "DEBUG\t"
+#            springframework: DEBUG
