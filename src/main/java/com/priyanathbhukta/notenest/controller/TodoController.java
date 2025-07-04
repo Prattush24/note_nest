@@ -20,7 +20,7 @@ import com.priyanathbhukta.notenest.service.TodoService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/todo")
+
 public class TodoController implements TodoControllerEndpoint{
 	
 	@Autowired

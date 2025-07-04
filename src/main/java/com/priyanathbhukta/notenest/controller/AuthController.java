@@ -1,4 +1,4 @@
-	package com.priyanathbhukta.notenest.controller;
+package com.priyanathbhukta.notenest.controller;
 
 import org.modelmapper.internal.bytebuddy.asm.Advice.OffsetMapping.ForOrigin.Renderer.ForReturnTypeName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
+
 public class AuthController implements AuthControllerEndpoint {
 
     private final NotesSchedular notesSchedular;

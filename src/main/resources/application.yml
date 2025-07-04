@@ -1,11 +1,21 @@
 spring:
-    application:
-        name: NoteNest-API-Service
-    profiles:
-        active: dev
+  application:
+    name: NoteNest-API-Service
+  profiles:
+    active: dev
+
+springdoc:
+  swagger-ui:
+    operationsSorter: method       # Sorts endpoints by HTTP method
+    tagsSorter: alpha              # Sorts tags alphabetically
+    path: /notenest-docs           # Custom Swagger UI path
+    display-request-duration: true # Show duration of each API request
+  api-docs: 
+    path: /notenest-api-docs       # Custom OpenAPI JSON path
 
 ---
 #Dev Config
+
 
 
 spring:
@@ -39,7 +49,7 @@ spring:
     servlet:
         multipart:
             max-file-size: 100MB
-            max-request-size: 100MB
+            max-request-size: 100MB		
 file:
     upload:
         path: notes/

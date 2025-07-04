@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.priyanathbhukta.notenest.controller.HomeController;
+
 import com.priyanathbhukta.notenest.handler.GenericResponse;
 import com.priyanathbhukta.notenest.service.JwtService;
 
@@ -38,6 +38,18 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+    	
+    	String path = request.getRequestURI();
+    	if (path.startsWith("/swagger-ui") ||
+    	    path.startsWith("/v3/api-docs") ||
+    	    path.startsWith("/swagger-ui.html") ||
+    	    path.startsWith("/v3/api-docs/swagger-config") ||
+    	    path.startsWith("/api/v1/auth") ||
+    	    path.startsWith("/api/v1/home")) {
+    	    filterChain.doFilter(request, response);
+    	    return;
+    	}
+
         try {
             String authHeader = request.getHeader("Authorization");
             String token = null;
