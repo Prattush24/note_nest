@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/category")
+
 public class CategoryController  implements CategoryControllerEndpoint{
 	
 	@Autowired

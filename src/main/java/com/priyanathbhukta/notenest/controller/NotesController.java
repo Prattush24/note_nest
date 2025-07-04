@@ -35,7 +35,7 @@ import com.priyanathbhukta.notenest.service.NotesService;
 import com.priyanathbhukta.notenest.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/notes")
+
 public class NotesController implements NotesControllerEndpoint {
 	
 	@Autowired
