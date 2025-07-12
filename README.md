@@ -46,7 +46,4 @@
 
 ```bash
 git clone https://github.com/priyanathbhukta/note-nest-api-services.git
-cd note-nest-api-service```
-2. Configure Application Properties
-
-Update your database credentials and JWT secret in:
+cd note-nest-api-service.
