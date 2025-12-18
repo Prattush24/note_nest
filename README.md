@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📝 NoteNest – E-Note Taking & To-Do Management Backend API
 
 **NoteNest** is a secure and scalable backend API built using Spring Boot that allows users to register, authenticate, and manage notes and to-do lists. It features JWT-based authentication, role-based access control, clean modular architecture, and Swagger API documentation.
@@ -47,3 +48,6 @@
 ```bash
 git clone https://github.com/priyanathbhukta/note-nest-api-services.git
 cd note-nest-api-service.
+=======
+# note_nest
+>>>>>>> 9f5ed79af6b4e087d52b1341646876c13272dadf
